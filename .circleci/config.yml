@@ -1,0 +1,31 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/Android-Weekly
+    docker:
+      - image: circleci/android:api-29
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Chmod permissions
+          command: sudo chmod +x ./gradlew
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Clean project
+          command: ./gradlew clean
+      - run:
+          name: Build project
+          command: ./gradlew assembleStagingDebug
+      - run:
+          name: Run unit test
+          command: ./gradlew testStagingDebugUnitTest
