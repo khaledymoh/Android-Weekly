@@ -2,6 +2,7 @@ package net.androidweekly.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import net.androidweekly.advertise.AdvertiseFragment
 import net.androidweekly.jobs.JobsFragment
 import net.androidweekly.jobs.JobsFragmentModule
 import net.androidweekly.latestissue.LatestIssueFragment
@@ -21,4 +22,7 @@ abstract class FragmentBuilderModule {
 
     @ContributesAndroidInjector(modules = [JobsFragmentModule::class])
     abstract fun bindJobsFragment(): JobsFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindAdvertiseFragment(): AdvertiseFragment
 }
